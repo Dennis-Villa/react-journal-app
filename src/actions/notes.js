@@ -1,5 +1,5 @@
 
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { addDoc, collection, doc, getFirestore, runTransaction } from "firebase/firestore";
 import { types } from "../types/types";
 import { LoadNotes } from "../helpers/loadNotes";
 import { finishLoading, startLoading } from "./ui";
@@ -56,3 +56,34 @@ export const setNotes = ( notes ) => ({
     type: types.notesLoad,
     payload: notes
 });
+
+export const startSaveNote = ( note ) => {
+    return async (dispatch, getState) => {
+
+        const {uid} = getState().auth;
+
+        if( !note.url ){
+            delete note.url;
+        }
+
+        const noteToFirestore = {...note};
+        delete noteToFirestore.id;
+
+        const db = getFirestore();
+        const sfDocRef = doc(db, `${uid}/journal/notes/${note.id}`);
+
+        try {
+            await runTransaction(db, async (transaction) => {
+              const sfDoc = await transaction.get(sfDocRef);
+              if (!sfDoc.exists()) {
+                throw Error("Document does not exist!");
+              }
+          
+              transaction.update(sfDocRef, noteToFirestore);
+            });
+          } catch (e) {
+            console.log("Transaction failed: ", e);
+          }
+
+    };
+};
