@@ -2,11 +2,14 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { startSaveNote } from '../../actions/notes';
+import { DateTime } from 'luxon';
 
 export const NotesAppBar = () => {
 
   const dispatch = useDispatch();
   const {active} = useSelector( state => state.notes );
+
+  const noteDate = DateTime.fromMillis(active.date).setLocale('en');
 
   const handleSave = () => {
     dispatch( startSaveNote(active) );
@@ -14,7 +17,7 @@ export const NotesAppBar = () => {
 
   return (
     <div className='notes__appbar'>
-        <span>28 de agosto 2023</span>
+        <span>{noteDate.toRelativeCalendar()}</span>
 
         <div>
             <button className='btn'>

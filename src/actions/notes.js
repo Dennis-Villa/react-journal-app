@@ -3,6 +3,9 @@ import { addDoc, collection, doc, getFirestore, runTransaction } from "firebase/
 import { types } from "../types/types";
 import { LoadNotes } from "../helpers/loadNotes";
 import { finishLoading, startLoading } from "./ui";
+import Swal from "sweetalert2";
+
+// react-journal
 
 export const startNewNote = () => {
     return async ( dispatch, getState ) => {
@@ -80,6 +83,9 @@ export const startSaveNote = ( note ) => {
               }
           
               transaction.update(sfDocRef, noteToFirestore);
+            
+              dispatch( refreshNote(note.id, noteToFirestore) );
+              Swal.fire('Saved', note.title, 'success');
             });
           } catch (e) {
             console.log("Transaction failed: ", e);
@@ -87,3 +93,14 @@ export const startSaveNote = ( note ) => {
 
     };
 };
+
+export const refreshNote = ( id, note ) => ({
+    type: types.notesUpdated,
+    payload: {
+        id, 
+        note: {
+            id,
+            ...note
+        }
+    }
+});
