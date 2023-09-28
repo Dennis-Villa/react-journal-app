@@ -3,7 +3,7 @@ import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, startGoogleLogin, startLoginEmailPassword } from '../../actions/auth';
+import { startGoogleLogin, startLoginEmailPassword } from '../../actions/auth';
 import validator from 'validator';
 import { removeError, setError } from '../../actions/ui';
 
@@ -27,7 +27,6 @@ export const LoginScreen = () => {
 
         if( isFormValid() ){
             dispatch( startLoginEmailPassword(email, password) );
-            // dispatch( login( "jahd76fassf", "Dennis" ) );
         }
     };
 
