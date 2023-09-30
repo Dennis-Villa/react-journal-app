@@ -4,7 +4,7 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 export const NothingSelected = () => {
     return (
-        <div className='nothing__main-content'>
+        <div className='nothing__main-content animate__animated animate__fadeIn animate__faster'>
             <p>
                 Select Something
                 <br/>

@@ -11,6 +11,7 @@ export const JournalEntries = () => {
         <div className='journal__entries'>
 
             {
+                !!notes &&
                 notes.map( note => (
                     <JournalEntry 
                         key={note.id}

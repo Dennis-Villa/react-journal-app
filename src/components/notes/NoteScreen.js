@@ -3,39 +3,43 @@ import React, { useEffect, useRef } from 'react'
 import { NotesAppBar } from './NotesAppBar'
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm';
-import { activeNote, startDeleting } from '../../actions/notes';
+import { activeNote, removeActive, startDeleting } from '../../actions/notes';
 
 export const NoteScreen = () => {
 
     const dispatch = useDispatch();
-    const { active:note } = useSelector( state => state.notes );
+    const { active } = useSelector( state => state.notes );
 
-    const [ formValues, handleInputChange, reset ] = useForm( note );
+    const [ formValues, handleInputChange, reset ] = useForm( active );
     const { title, body } = formValues;
 
-    const activeId = useRef( formValues.id);
-
+    const activeId = useRef( formValues.id );
+    
     useEffect(() => {
-        
-        if( (note.id !== activeId.current) ){
-            reset(note);
-            activeId.current = note.id;
+    
+        if( (active.id !== activeId.current) ){
+            reset(active);
+            activeId.current = active.id;
         }
     
-    }, [note, reset]);
+    }, [active, reset, dispatch]);
 
     useEffect(() => {
 
-        dispatch( activeNote( activeId.current, {...formValues} ) );
+            dispatch( activeNote( activeId.current, {...formValues} ) );
+
+        return () => {
+            dispatch( removeActive() );
+        };
         
-    }, [formValues, dispatch]);
+    }, [activeId, formValues, dispatch]);
     
     const handleDelete = () => {
         dispatch( startDeleting( activeId.current, title ) );
     };
 
     return (
-        <div className='notes__main-content'>
+        <div className='notes__main-content animate__animated animate__fadeIn animate__faster'>
 
             <NotesAppBar/>
 
@@ -60,10 +64,10 @@ export const NoteScreen = () => {
                 ></textarea>
 
                 {
-                    !!note.url &&
+                    !!active.url &&
                     <div className='notes__image'>
                         <img 
-                            src={note.url}
+                            src={active.url}
                             alt='imagen'
                         />
                     </div>

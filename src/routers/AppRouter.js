@@ -31,7 +31,7 @@ export const AppRouter = () => {
 
             setChecking(false);
 
-        })
+        });
     
     }, [auth, dispatch])
     

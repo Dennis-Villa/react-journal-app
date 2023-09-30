@@ -58,6 +58,10 @@ export const activeNote = ( id, note ) => ({
     }
 });
 
+export const removeActive = () => ({
+    type: types.notesNotActive
+});
+
 export const startLoadingNotes = ( uid ) => {
     return async (dispatch) => {
         dispatch(
@@ -81,7 +85,6 @@ export const setNotes = ( notes ) => ({
 
 export const startSaveNote = ( note ) => {
     return async (dispatch, getState) => {
-
         const {uid} = getState().auth;
 
         if( !note.url ){
@@ -94,7 +97,6 @@ export const startSaveNote = ( note ) => {
         const db = getFirestore();
 
         const sfDocRef = doc(db, `${uid}/journal/notes/${note.id}`);
-
 
         try {
             await runTransaction(db, async (transaction) => {
@@ -184,4 +186,8 @@ export const startDeleting = (id, title = '') => {
 export const deleteNote = (id) => ({
     type: types.notesDelete,
     payload: id
+});
+
+export const noteLogout = () => ({
+    type: types.notesLogoutCleaning
 });

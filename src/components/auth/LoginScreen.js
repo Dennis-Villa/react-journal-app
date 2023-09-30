@@ -1,5 +1,5 @@
 
-import React, { Fragment } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,8 +16,8 @@ export const LoginScreen = () => {
     const { loading, msgError } = useSelector( state => state.ui );
 
     const [ formValues, handleInputChange ] = useForm({
-        email: 'denis@gmail.com',
-        password: 'asdfghj'
+        email: '',
+        password: ''
     });
 
     const { email, password } = formValues;
@@ -57,7 +57,7 @@ export const LoginScreen = () => {
     };
 
     return (
-        <>
+        <div className='animate__animated animate__fadeIn animate__faster'>
             <h3 className='auth__title'>Login</h3>
 
             <form onSubmit={handleLogin}>
@@ -119,6 +119,6 @@ export const LoginScreen = () => {
                 </Link>
 
             </form>
-        </>
+        </div>
     );
 }
